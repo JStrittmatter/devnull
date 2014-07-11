@@ -16,6 +16,7 @@ import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import javax.persistence.FetchType
+import javax.persistence.TableGenerator
 import javax.validation.constraints.Pattern
 import javax.validation.constraints.Size
 import javax.validation.constraints.NotNull
@@ -37,7 +38,14 @@ class User implements Serializable, UserDetails {
     static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @TableGenerator(name = "USER_GEN",
+            table = "SEQUENCES",
+            pkColumnName = "SEQ_NAME",
+            valueColumnName = "SEQ_NUMBER",
+            pkColumnValue = "USER_SEQ",
+            allocationSize=1,
+            initialValue = 10)
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "USER_GEN")
     Integer id
 
     @ManyToMany(cascade = [CascadeType.MERGE, CascadeType.PERSIST], fetch=FetchType.EAGER)

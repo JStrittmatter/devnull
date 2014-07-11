@@ -16,7 +16,14 @@ class Role implements Serializable {
 
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @TableGenerator(name = "ROLE_GEN",
+            table = "SEQUENCES",
+            pkColumnName = "SEQ_NAME",
+            valueColumnName = "SEQ_NUMBER",
+            pkColumnValue = "ROLE_SEQ",
+            allocationSize=1,
+            initialValue = 10)
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "ROLE_GEN")
     Integer id
 
     @Pattern(regexp = "^ROLE_.*", message = "Role names must begin with ROLE_")
